@@ -10,15 +10,15 @@ class UserController extends Controller
 {
     public function index()
     {
-        //tambah data user dengan Eloquent ORM
-        /*$data = [
-            'level_id' => 2,
-            'username' => 'manager_tiga',
-            'nama' => 'Manager 3',
-            'password' => Hash::make('12345'),
-        ];
-        //buat data user dengan Eloquent ORM
-        UserModel::create($data);*/
+        $user = UserModel::firstOrNew(
+            [
+                'username' => 'manager333',
+                'nama' => 'Manager Tiga Tiga',
+                'password' => Hash::make('12345'),
+                'level_id' => 2
+            ],
+        );
+        $user->save();  //menyimpan data baru yang dibuat metode firstOrNew
 
         //tambah data user dengan Eloquent Model
         /*$data = [
@@ -32,6 +32,25 @@ class UserController extends Controller
 
         //update data user dengan Eloquent Model
         //UserModel::where('username', 'customer-1')->update($data);
+
+        //tambah data user dengan Eloquent ORM
+        /*$data = [
+            'level_id' => 2,
+            'username' => 'manager_tiga',
+            'nama' => 'Manager 3',
+            'password' => Hash::make('12345'),
+        ];
+        //buat data user dengan Eloquent ORM
+        UserModel::create($data);*/
+
+        /*$user = UserModel::firstOrCreate(
+            [
+                'username' => 'manager22',
+                'nama' => 'Manager Dua Dua',
+                'password' => Hash::make('12345'),
+                'level_id' => 2
+            ],
+        );*/
         
         //coba akses model UserModel
         //$user = UserModel::all(); //mengambil semua data dari tabel m_user
@@ -43,7 +62,7 @@ class UserController extends Controller
         });*/
         //$user = UserModel::findOrFail(1);
         //$user = UserModel::where('username', 'manager9')->firstOrFail();
-        $user = UserModel::where('level_id', 2)->count();
+        //$user = UserModel::where('level_id', 2)->count();
         //dd($user);  //dd (dump and die) di sini berfungsi untuk membaca keseluruhan data pada tabel m_user
         return view('user', ['data' => $user]);
     }
