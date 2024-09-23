@@ -42,7 +42,9 @@ class UserController extends Controller
             abort(404);
         });*/
         //$user = UserModel::findOrFail(1);
-        $user = UserModel::where('username', 'manager9')->firstOrFail();
+        //$user = UserModel::where('username', 'manager9')->firstOrFail();
+        $user = UserModel::where('level_id', 2)->count();
+        //dd($user);  //dd (dump and die) di sini berfungsi untuk membaca keseluruhan data pada tabel m_user
         return view('user', ['data' => $user]);
     }
 }
