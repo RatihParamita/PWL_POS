@@ -92,11 +92,12 @@ class UserController extends Controller
         //$user = UserModel::firstWhere('level_id', 1); //alternatif ambil model pertama yang cocok dengan batasan kueri...
         /*$user = UserModel::findOr(20, ['username', 'nama'], function() {
             abort(404);
-        });
+        });*/
         //$user = UserModel::findOrFail(1);
         //$user = UserModel::where('username', 'manager9')->firstOrFail();
         //$user = UserModel::where('level_id', 2)->count();
-        dd($user);  //dd (dump and die) di sini berfungsi untuk membaca keseluruhan data pada tabel m_user*/
+        $user = UserModel::with('level')->get();
+        //dd($user);  //dd (dump and die) di sini berfungsi untuk membaca keseluruhan data pada tabel m_user
         return view('user', ['data' => $user]);
     }
 
