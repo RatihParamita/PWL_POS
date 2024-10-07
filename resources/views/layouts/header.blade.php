@@ -134,9 +134,9 @@
       <!-- Tombol Logout -->
       <li class="nav-item">
         <a class="nav-link" data-widget="logout" data-slide="true" href="{{ url('/logout') }}" role="button">
-            <i class="fas fa-sign-out-alt"></i> Logout
+          Logout <i class="fas fa-sign-out-alt"></i>
         </a>
-    </li>
+      </li>
     
     </ul>
   </nav>
