@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;   //mengimpor validator
 
-//use Illuminate\Support\Facades\Hash;    //mengimpor kelas Hash
+use Illuminate\Support\Facades\Hash;    //mengimpor kelas Hash
 
 class UserController extends Controller
 {
@@ -249,7 +249,7 @@ class UserController extends Controller
                 'level_id'  => 'required|integer',
                 'username'  => 'required|string|min:3|unique:m_user,username',
                 'nama'      => 'required|string|max:100',
-                'password'  => 'required|min:6'
+                'password'  => 'required|min:5'
             ];
 
             $validator = Validator::make($request->all(), $rules);
@@ -347,7 +347,7 @@ class UserController extends Controller
                 'level_id' => 'required|integer',
                 'username' => 'required|max:20|unique:m_user,username,'.$id.',user_id',
                 'nama' => 'required|max:100',
-                'password' => 'nullable|min:6|max:20'
+                'password' => 'nullable|min:5|max:20'
             ];
 
             // use Illuminate\Support\Facades\Validator;
@@ -366,6 +366,8 @@ class UserController extends Controller
                 if(!$request->filled('password') ){ // jika password tidak diisi, maka hapus dari request
                     $request->request->remove('password');
                 }
+
+                $request['password'] = Hash::make($request->password);
 
                 $check->update($request->all());
                 return response()->json([
