@@ -131,5 +131,12 @@
           <i class="fas fa-th-large"></i>
         </a>
       </li>
+      <!-- Tombol Logout -->
+      <li class="nav-item">
+        <a class="nav-link" data-widget="logout" data-slide="true" href="{{ url('/logout') }}" role="button">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+    </li>
+    
     </ul>
   </nav>
