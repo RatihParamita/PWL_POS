@@ -3,6 +3,7 @@
 /*use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LevelController;*/
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LevelController;
@@ -35,7 +36,19 @@ Route::post('/user/tambah_simpan', [UserController::class, 'tambah_simpan']);
 Route::get('/user/ubah/{id}', [UserController::class, 'ubah']);
 Route::put('/user/ubah_simpan/{id}', [UserController::class, 'ubah_simpan']);
 Route::get('/user/hapus/{id}', [UserController::class, 'hapus']);*/
-Route::get('/', [WelcomeController::class, 'index']);
+
+Route::pattern('id', '[0-9]+'); //ketika ada parameter {id}, maka harus berupa angka
+
+Route::get('login', [AuthController::class, 'login'])->name('login');
+Route::post('login', [AuthController::class, 'postlogin']);
+Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
+
+Route::middleware(['auth'])->group(function(){
+    //semua route yang perlu otentikasi
+    Route::get('/', [WelcomeController::class, 'index']);
+});
+
+/*Route::get('/', [WelcomeController::class, 'index']);
 
 Route::group(['prefix' => 'user'], function(){
     Route::get('/', [UserController::class, 'index']);                          //menampilkan laman awal user
@@ -120,4 +133,4 @@ Route::group(['prefix' => 'barang'], function(){
     Route::get('/{id}/delete_ajax', [BarangController::class, 'confirm_ajax']);         //menampilkan form confirm hapus data barang AJAX
     Route::delete('/{id}/delete_ajax', [BarangController::class, 'delete_ajax']);       //menghapus data barang AJAX
     Route::delete('/{id}', [BarangController::class, 'destroy']);                       //menghapus data barang
-});
+});*/
