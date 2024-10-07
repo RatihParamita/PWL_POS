@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LevelController;
+use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
@@ -39,6 +40,9 @@ Route::get('/user/hapus/{id}', [UserController::class, 'hapus']);*/
 
 Route::pattern('id', '[0-9]+'); //ketika ada parameter {id}, maka harus berupa angka
 
+Route::get('signup', [RegistrationController::class, 'registration'])->name('signup');
+Route::post('signup', [RegistrationController::class, 'store']);
+
 Route::get('login', [AuthController::class, 'login'])->name('login');
 Route::post('login', [AuthController::class, 'postlogin']);
 Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
@@ -51,12 +55,18 @@ Route::middleware(['auth'])->group(function(){
     Route::group(['prefix' => 'user', 'middleware'=> 'authorize:ADM'], function(){
         Route::get('/', [UserController::class, 'index']);                          //menampilkan laman awal user
         Route::post('/list', [UserController::class, 'list']);                      //menampilkan data user dalam bentuk json untuk datatables
+        Route::get('/create', [UserController::class, 'create']);                   //menampilkan laman form tambah user
+        Route::post('/', [UserController::class, 'store']);                         //menyimpan data user baru
         Route::get('/create_ajax', [UserController::class, 'create_ajax']);         //menampilkan laman form tambah user AJAX
         Route::post('/ajax', [UserController::class, 'store_ajax']);                //menyimpan data user baru AJAX
+        Route::get('/{id}', [UserController::class, 'show']);                       //menampilkan detail user
+        Route::get('/{id}/edit', [UserController::class, 'edit']);                  //menampilkan laman form edit user
+        Route::put('/{id}', [UserController::class, 'update']);                     //menyimpan perubahan data user
         Route::get('/{id}/edit_ajax', [UserController::class, 'edit_ajax']);        //menampilkan laman form edit user AJAX
         Route::put('/{id}/update_ajax', [UserController::class, 'update_ajax']);    //menyimpan perubahan data user AJAX
         Route::get('/{id}/delete_ajax', [UserController::class, 'confirm_ajax']);   //menampilkan form confirm hapus data user AJAX
         Route::delete('/{id}/delete_ajax', [UserController::class, 'delete_ajax']); //menghapus data user AJAX
+        Route::delete('/{id}', [UserController::class, 'destroy']);                 //menghapus data user
     });
     
     //Semua route di grup ini harus punya role ADM (Administrator)
