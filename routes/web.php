@@ -115,6 +115,8 @@ Route::middleware(['auth'])->group(function(){
         Route::put('/{id}/update_ajax', [BarangController::class, 'update_ajax']);          //menyimpan perubahan data barang AJAX
         Route::get('/{id}/delete_ajax', [BarangController::class, 'confirm_ajax']);         //menampilkan form confirm hapus data barang AJAX
         Route::delete('/{id}/delete_ajax', [BarangController::class, 'delete_ajax']);       //menghapus data barang AJAX
+        Route::get('/import', [BarangController::class, 'import']);                         //menampilkan form impor data barang
+        Route::post('/import_ajax', [BarangController::class, 'import_ajax']);              //mengimpor file excel ke daftar data barang
     });
 });
 
