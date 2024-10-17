@@ -6,6 +6,7 @@ use App\Models\LevelModel;   //mengimpor model LevelModel
 use App\Models\UserModel;   //mengimpor model UserModel
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Validator;   //mengimpor validator
 
 use Illuminate\Support\Facades\Hash;    //mengimpor kelas Hash
@@ -411,6 +412,22 @@ class UserController extends Controller
             }
         }
         return redirect('/');
+    }
+
+    public function export_pdf()
+    {
+        $user = UserModel::select('level_id', 'username', 'nama')
+                    ->orderBy('level_id')
+                    ->with('level')
+                    ->get();
+                    
+        //use Barryvdh\DomPDF\Facade\Pdf;
+        $pdf = Pdf::loadView('user.export_pdf', ['user' => $user]);
+        $pdf->setPaper('a4', 'portrait'); //set ukuran kertas dan orientasi
+        $pdf->setOption("isRemoteEnabled", true); //set true jika ada gambar dari url
+        $pdf->render();
+
+        return $pdf->stream('Data User '.date('Y-m-d H:i:s').'.pdf');
     }
 
     //Menghapus data user
