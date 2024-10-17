@@ -117,6 +117,7 @@ Route::middleware(['auth'])->group(function(){
         Route::delete('/{id}/delete_ajax', [BarangController::class, 'delete_ajax']);       //menghapus data barang AJAX
         Route::get('/import', [BarangController::class, 'import']);                         //menampilkan form impor data barang
         Route::post('/import_ajax', [BarangController::class, 'import_ajax']);              //mengimpor file excel ke daftar data barang
+        Route::get('/export_excel', [BarangController::class, 'export_excel']);             //mengekspor data barang dalam bentuk file excel
     });
 });
 
