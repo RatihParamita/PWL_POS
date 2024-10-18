@@ -168,7 +168,7 @@ class UserController extends Controller
     // Ambil data user dalam bentuk json untuk datatables
     public function list(Request $request)
     {
-        $users = UserModel::select('user_id', 'username', 'nama', 'level_id')
+        $users = UserModel::select('user_id', 'username', 'nama', 'foto', 'level_id')
                     ->with('level');
 
         //Filter data user berdasarkan level_id
@@ -230,7 +230,7 @@ class UserController extends Controller
             'level_id'  => $request->level_id
         ]);
 
-        return redirect('/user')->with('success', 'Data user berhasil disimpan');
+        return redirect('/user')->with('success', 'Data user berhasil disimpan!');
     }
 
     //Menampilkan laman form tambah user baru AJAX
@@ -250,7 +250,8 @@ class UserController extends Controller
                 'level_id'  => 'required|integer',
                 'username'  => 'required|string|min:3|unique:m_user,username',
                 'nama'      => 'required|string|max:100',
-                'password'  => 'required|min:5'
+                'password'  => 'required|min:5',
+                'foto'      => 'image|mimes:jpeg,png,jpg|max:2048'
             ];
 
             $validator = Validator::make($request->all(), $rules);
@@ -258,15 +259,19 @@ class UserController extends Controller
             if($validator->fails()){
                 return response()->json([
                     'status'    =>false,    //response status, false: eror/gagal, true:berhasil
-                    'message'   => 'Validasi Gagal',
+                    'message'   => 'Validasi Gagal!',
                     'msgField'  => $validator->errors(),    //pesan eror validasi
                 ]);
             }
 
+            $fileName = time() . $request->file('foto')->getClientOriginalExtension();
+            $path = $request->file('foto')->storeAs('images', $fileName);
+            $request['foto'] = '/storage/' . $path;
+
             UserModel::create($request->all());
             return response()->json([
                 'status'    => true,
-                'message'   => 'Data user berhasil disimpan'
+                'message'   => 'Data user berhasil disimpan!'
             ]);
         }
         redirect('/');
@@ -328,7 +333,7 @@ class UserController extends Controller
             'password' => $request->password ? bcrypt($request->password) : UserModel::find($id)->password,
             'level_id' => $request->level_id
         ]);
-        return redirect('/user')->with('success', 'Data user berhasil diubah');
+        return redirect('/user')->with('success', 'Data user berhasil diubah!');
     }
 
     //Menampilkan laman form edit user AJAX
@@ -347,8 +352,9 @@ class UserController extends Controller
             $rules = [
                 'level_id' => 'required|integer',
                 'username' => 'required|max:20|unique:m_user,username,'.$id.',user_id',
-                'nama' => 'required|max:100',
-                'password' => 'nullable|min:5|max:20'
+                'nama'     => 'required|max:100',
+                'password' => 'nullable|min:5|max:20',
+                'foto'     => 'image|mimes:jpeg,png,jpg|max:2048'
             ];
 
             // use Illuminate\Support\Facades\Validator;
@@ -357,7 +363,7 @@ class UserController extends Controller
             if ($validator->fails()) {
                 return response()->json([
                     'status' => false, // respon json, true: berhasil, false: gagal
-                    'message' => 'Validasi gagal.',
+                    'message' => 'Validasi gagal!',
                     'msgField' => $validator->errors() // menunjukkan field mana yang error
                 ]);
             }
@@ -370,15 +376,23 @@ class UserController extends Controller
 
                 $request['password'] = Hash::make($request->password);
 
+                $fileName = time() . $request->file('foto')->getClientOriginalExtension();
+                $path = $request->file('foto')->storeAs('images', $fileName);
+                $request['foto'] = '/storage/' . $path;
+
+                if (!$request->filled('foto')) { // jika foto tidak diisi, maka hapus dari request 
+                    $request->request->remove('foto');
+                }
+
                 $check->update($request->all());
                 return response()->json([
                     'status' => true,
-                    'message' => 'Data berhasil diupdate'
+                    'message' => 'Data berhasil diupdate!'
                 ]);
             } else{
                 return response()->json([
                     'status' => false,
-                    'message' => 'Data tidak ditemukan'
+                    'message' => 'Data tidak ditemukan!'
                 ]);
             }
         }
@@ -402,12 +416,12 @@ class UserController extends Controller
                 $user->delete();
                 return response()->json([
                     'status'    => true,
-                    'message'   => 'Data berhasil dihapus'
+                    'message'   => 'Data berhasil dihapus!'
                 ]);
             } else {
                 return response()->json([
                     'status'    => false,
-                    'message'   => 'Data tidak ditemukan'
+                    'message'   => 'Data tidak ditemukan!'
                 ]);
             }
         }
@@ -435,13 +449,13 @@ class UserController extends Controller
     {
         $check = UserModel::find($id);
         if (!$check) {  //untuk mengecek bila data user dengan id tertentu ada atau tidak
-            return redirect('/user')->with('error', 'Data user tidak ditemukan');
+            return redirect('/user')->with('error', 'Data user tidak ditemukan!');
         } 
         
         try{
             UserModel::destroy($id);    //hapus data level
 
-            return redirect('/user')->with('success', 'Data user berhasil dihapus');
+            return redirect('/user')->with('success', 'Data user berhasil dihapus!');
         } catch (\Illuminate\Database\QueryException){
 
             //jika eror ketika menghapus data, redirect kembali ke laman dengan membawa pesan eror

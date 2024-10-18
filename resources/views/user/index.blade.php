@@ -34,7 +34,7 @@
             </div>
             <table class="table table-bordered table-striped table-hover table-sm" id="table_user">
                 <thead>
-                    <tr><th>ID</th><th>Username</th><th>Nama</th><th>Level Pengguna</th><th>Aksi</th></tr>
+                    <tr><th>ID</th><th>Username</th><th>Nama</th><th>Level Pengguna</th><th>Foto</th><th>Aksi</th></tr>
                 </thead>
             </table>
         </div>
@@ -88,6 +88,12 @@
                         // mengambil data level hasil dari ORM berelasi
                         data: "level.level_nama",
                         className: "",
+                        orderable: false,
+                        searchable: false
+                    },{
+                        data: "foto",
+                        className: "",
+                        width: "14%",
                         orderable: false,
                         searchable: false
                     },{
