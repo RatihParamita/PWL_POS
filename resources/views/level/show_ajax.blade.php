@@ -23,7 +23,7 @@
             </div>
             <div class="modal-body">
                 <table class="table table-sm table-bordered table-striped">
-                    <tr><th class="text-right col-4">Kode :</th><td class="col-9">{{$level->level_id }}</td></tr>
+                    <tr><th class="text-right col-4">Kode :</th><td class="col-9">{{$level->level_kode }}</td></tr>
                     <tr><th class="text-right col-4">Nama :</th><td class="col-9">{{ $level->level_nama }}</td></tr>
                 </table>
             </div>
