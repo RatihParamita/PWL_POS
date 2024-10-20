@@ -126,6 +126,14 @@ class LevelController extends Controller
         redirect('/');
     }
 
+    //Menampilkan form detil data level AJAX
+    public function show_ajax($id)
+    {
+        $level = LevelModel::find($id);
+        
+        return view('level.show_ajax', ['level' => $level]);
+    }
+
     public function show(string $id)
     {
         $level = LevelModel::find($id);
@@ -180,7 +188,7 @@ class LevelController extends Controller
         //periksa bila request dari ajax atau bukan
         if($request->ajax() || $request->wantsJson()) {
             $rules = [
-                'level_kode' => 'required|string|unique:m_level,level_kode',
+                'level_kode' => 'required|string|unique:m_level,level_kode,'.$id.',level_id',
                 'level_nama' => 'required|string|max:100',
             ];
 

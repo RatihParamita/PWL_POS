@@ -86,6 +86,7 @@ Route::middleware(['auth'])->group(function(){
         Route::post('/list', [LevelController::class, 'list']);                         //menampilkan data level dalam bentuk json untuk datatables
         Route::get('/create_ajax', [LevelController::class, 'create_ajax']);            //menampilkan laman form tambah level AJAX
         Route::post('/ajax', [LevelController::class, 'store_ajax']);                   //menyimpan data level baru AJAX
+        Route::get('/{id}/show_ajax', [LevelController::class, 'show_ajax']);           //menampilkan form detil data level AJAX
         Route::get('/{id}/edit_ajax', [LevelController::class, 'edit_ajax']);           //menampilkan laman form edit level AJAX
         Route::put('/{id}/update_ajax', [LevelController::class, 'update_ajax']);       //menyimpan perubahan data level AJAX
         Route::get('/{id}/delete_ajax', [LevelController::class, 'confirm_ajax']);      //menampilkan form confirm hapus data level AJAX
