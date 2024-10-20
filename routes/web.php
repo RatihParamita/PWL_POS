@@ -71,6 +71,7 @@ Route::middleware(['auth'])->group(function(){
         Route::get('/{id}', [UserController::class, 'show']);                       //menampilkan detail user
         Route::get('/{id}/edit', [UserController::class, 'edit']);                  //menampilkan laman form edit user
         Route::put('/{id}', [UserController::class, 'update']);                     //menyimpan perubahan data user
+        Route::get('/{id}/show_ajax', [UserController::class, 'show_ajax']);        //menampilkan form detil data user AJAX
         Route::get('/{id}/edit_ajax', [UserController::class, 'edit_ajax']);        //menampilkan laman form edit user AJAX
         Route::put('/{id}/update_ajax', [UserController::class, 'update_ajax']);    //menyimpan perubahan data user AJAX
         Route::get('/{id}/delete_ajax', [UserController::class, 'confirm_ajax']);   //menampilkan form confirm hapus data user AJAX

@@ -290,6 +290,14 @@ class UserController extends Controller
         redirect('/');
     }
 
+    //Menampilkan form detil data user AJAX
+    public function show_ajax($id)
+    {
+        $user = UserModel::find($id);
+        
+        return view('user.show_ajax', ['user' => $user]);
+    }
+
     //Menampilkan detil data user
     public function show(string $id)
     {
@@ -397,18 +405,19 @@ class UserController extends Controller
 
                     $path = 'adminlte/dist/img/';
                     $file->move($path, $filename);
+                    $check->foto = $path . $filename; // Update foto hanya jika ada file baru
                 }
 
-                if (!$request->filled('foto')) { // jika foto tidak diisi, maka hapus dari request 
+                /*if (!$request->filled('foto')) { // jika foto tidak diisi, maka hapus dari request 
                     $request->request->remove('foto');
-                }
+                }*/
 
                 $check->update([
                     'username'  => $request->username,
                     'nama'      => $request->nama,
                     'password'  => $request->password ? bcrypt($request->password) : UserModel::find($id)->password,
                     'level_id'  => $request->level_id,
-                    'foto'      => $path.$filename
+                    //'foto'      => $path.$filename
                 ]);
                 return response()->json([
                     'status' => true,
