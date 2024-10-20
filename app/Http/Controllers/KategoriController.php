@@ -132,6 +132,14 @@ class KategoriController extends Controller
         redirect('/');
     }
 
+    //Menampilkan form detil data kategori AJAX
+    public function show_ajax($id)
+    {
+        $kategori = KategoriModel::find($id);
+        
+        return view('kategori.show_ajax', ['kategori' => $kategori]);
+    }
+
     public function show(string $id)
     {
         $kategori = KategoriModel::find($id);
@@ -186,7 +194,7 @@ class KategoriController extends Controller
         //periksa bila request dari ajax atau bukan
         if($request->ajax() || $request->wantsJson()) {
             $rules = [
-                'kategori_kode' => 'required|string|unique:m_kategori,kategori_kode',
+                'kategori_kode' => 'required|string|unique:m_kategori,kategori_kode,'.$id.',kategori_id',
                 'kategori_nama' => 'required|string|max:100',
             ];
 
