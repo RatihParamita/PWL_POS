@@ -11,6 +11,7 @@ use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\ProfileController;
 use App\Models\KategoriModel;
 use Illuminate\Support\Facades\Route;
 
@@ -50,6 +51,14 @@ Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
 Route::middleware(['auth'])->group(function(){
     //semua route yang perlu otentikasi
     Route::get('/', [WelcomeController::class, 'index']);
+
+    Route::middleware(['authorize:ADM,MNG,STF,PLG'])->group(function(){
+        Route::get('/profile', [ProfileController::class, 'index']);
+        Route::get('/profile/{id}/edit_ajax', [ProfileController::class, 'edit_ajax']);
+        Route::put('/profile/{id}/update_ajax', [ProfileController::class, 'update_ajax']);
+        Route::get('/profile/{id}/edit_foto', [ProfileController::class, 'edit_foto']);
+        Route::put('/profile/{id}/update_foto', [ProfileController::class, 'update_foto']);
+    });
 
     //Semua route di grup ini harus punya role ADM (Administrator)
     Route::group(['prefix' => 'user', 'middleware'=> 'authorize:ADM'], function(){

@@ -21,15 +21,21 @@
             </li>
             <li class="nav-header">Data Pengguna</li>
             <li class="nav-item">
+                <a href="{{ url('/profile') }}" class="nav-link {{ $activeMenu == 'profile' ? 'active' : '' }} ">
+                    <i class="nav-icon far fa-address-card"></i>
+                    <p>Profil Pengguna</p>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a href="{{ url('/level') }}" class="nav-link {{ ($activeMenu == 'level')?'active' : '' }} ">
                     <i class="nav-icon fas fa-layer-group"></i>
-                    <p>Level User</p>
+                    <p>Level Pengguna</p>
                 </a>
             </li>
             <li class="nav-item">
                 <a href="{{ url('/user') }}" class="nav-link {{ ($activeMenu == 'user')?'active' : '' }}">
                     <i class="nav-icon far fa-user"></i>
-                    <p>Data User</p>
+                    <p>Data Pengguna</p>
                 </a>
             </li>
             <li class="nav-header">Data Barang</li>

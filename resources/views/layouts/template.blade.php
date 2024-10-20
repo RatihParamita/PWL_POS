@@ -6,6 +6,8 @@
   <title>{{ config('app.name', 'PWL Laravel Starter Code') }}</title>
 
   <meta name="csrf-token" content="{{ csrf_token() }}"> <!-- untuk mengirim token Laravel CSRF pada setiap request AJAX -->
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -32,12 +34,9 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    @if (session()->has('profile_img_path'))
-      <img src="{{ asset('storage/' . session('profile_img_path')) }}" alt="Foto Profil" class="brand-image img-circle elevation-3">
-    @else
-      <a href="{{ url('/') }}" class="brand-link">
+    <a href="{{ url('/') }}" class="brand-link">
         <img src="{{ asset('adminlte/dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-    @endif
+    
         <span class="brand-text font-weight-light">PWL - Starter Code</span>
       </a>
 

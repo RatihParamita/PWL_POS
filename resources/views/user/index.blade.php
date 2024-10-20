@@ -95,7 +95,16 @@
                         className: "",
                         width: "14%",
                         orderable: false,
-                        searchable: false
+                        searchable: false,
+                        "render": function(data) {
+                            // Check if data exists
+                            if (data) {
+                                // Construct the image URL using Blade syntax
+                                return '<img src=" {{ asset('data') }} " width="50px"/>';
+                            }
+                            return 'Foto kosong'; // Return empty if no data
+                        
+                    }
                     },{
                         data: "aksi",
                         className: "",
