@@ -12,35 +12,32 @@
         </div>
       </div> 
       <div class="card-body">
-        <!-- untuk Filter Data -->
-        <div id="filter" class="form-horizontal filter-date p-2 border bottom mb-2">
-          <div class="row">
-            <div class="col-md-12">
-              <div class="form-group form-group-sm row text-sm mb-0">
-                <label for="filter_date" class="col-md-1 col-form-label">Filter</label>
-                <div class="col-md-3">
-                  <select name="filter_kategori" class="form-control form-control-sm filter_kategori">
-                    <option value="">- Semua -</option>
-                    @foreach ($kategori as $k)
-                      <option value="{{ $k->kategori_id }}">{{ $k->kategori_nama }}</option>
-                    @endforeach
-                  </select>
-                  <small class="form-text text-muted">Kategori Barang</small>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }} </div>
         @endif
         @if (session('error'))
             <div class="alert alert-danger">{{ session('error') }} </div>
         @endif
-        <table class="table table-bordered table-striped table-hover table-sm" id="table_barang"> 
-          <thead> 
-            <tr><th>ID</th><th>Kode Barang</th><th>Nama Barang</th><th>Harga Beli</th><th>Harga Jual</th><th>Kategori Barang</th><th>Aksi</th></tr> 
-          </thead> 
+        <div class="row">
+          <div class="col-md-12">
+              <div class="form-group row">
+                  <label class="col-1 control-label col-form-label">Filter: </label>
+                  <div class="col-3">
+                      <select class="form-control" id="kategori_id" name="kategori_id" required>
+                          <option value="">- Semua -</option>
+                          @foreach ($kategori as $item)
+                              <option value="{{ $item->kategori_id }}">{{ $item->kategori_nama }}</option>
+                          @endforeach
+                      </select>
+                      <small class="form-text text-muted">Kategori Barang</small>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <table class="table table-bordered table-striped table-hover table-sm" id="table_barang"> 
+        <thead> 
+          <tr><th>ID</th><th>Kode Barang</th><th>Nama Barang</th><th>Harga Beli</th><th>Harga Jual</th><th>Kategori Barang</th><th>Aksi</th></tr> 
+        </thead> 
       </table> 
     </div> 
   </div>
@@ -58,9 +55,9 @@
       });
     }
 
-    var tableBarang;
+    var dataBarang;
     $(document).ready(function() { 
-      tableBarang = $('#table_barang').DataTable({ 
+      dataBarang = $('#table_barang').DataTable({ 
           processing: true,
           serverSide: true,      
           ajax: { 
@@ -68,7 +65,7 @@
               "dataType": "json", 
               "type": "POST" ,
               "data": function (d){
-                d.filter_kategori = $('.filter_kategori').val();
+                d.kategori_id = $('#kategori_id').val();
               }
           }, 
           columns: [ 
@@ -127,14 +124,9 @@
             } 
           ] 
       });
-      $('#table-barang_filter input').unbind().bind().on('keyup', function(e){
-        if(e.keyCode == 13){ // enter key
-          tableBarang.search(this.value).draw();
-        }
-      });
-      $('.filter_kategori').change(function() {
-        tableBarang.draw();
-      });
+      $('#kategori_id').on('change', function() {
+                dataBarang.ajax.reload();
+            })
     }); 
-  </script> 
+  </script>
 @endpush

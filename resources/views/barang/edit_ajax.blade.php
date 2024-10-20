@@ -73,10 +73,13 @@
                     harga_jual: {required: true}
                 },
                 submitHandler: function(form) {
+                    var formData = new FormData(form);
                     $.ajax({
                         url: form.action,
                         type: form.method,
-                        data: $(form).serialize(),
+                        data: formData,
+                            processData: false, // setting processData dan contentType ke false, untuk menghandle file 
+                            contentType: false,
                         success: function(response) {
                             if(response.status){
                                 $('#myModal').modal('hide');

@@ -140,6 +140,14 @@ class BarangController extends Controller
         redirect('/');
     }
 
+    //Menampilkan form detil data barang AJAX
+    public function show_ajax($id)
+    {
+        $barang = BarangModel::find($id);
+        
+        return view('barang.show_ajax', ['barang' => $barang]);
+    }
+
     public function show(string $id)
     {
         $barang = BarangModel::with('kategori')->find($id);
@@ -213,8 +221,7 @@ class BarangController extends Controller
         if($request->ajax() || $request->wantsJson()) {
             $rules = [
                 'kategori_id' => ['required', 'integer', 'exists:m_kategori,kategori_id'],
-                'barang_kode' => ['required', 'min:3', 'max:20',
-                'unique:m_barang,barang_kode, '. $id .',barang_id'],
+                'barang_kode' => ['required', 'min:3', 'max:20', 'unique:m_barang,barang_kode, '. $id .',barang_id'],
                 'barang_nama' => ['required', 'string', 'max:100'],
                 'harga_beli' => ['required', 'numeric'],
                 'harga_jual' => ['required', 'numeric'],
@@ -226,7 +233,7 @@ class BarangController extends Controller
             if ($validator->fails()) {
                 return response()->json([
                     'status' => false, // respon json, true: berhasil, false: gagal
-                    'message' => 'Validasi gagal.',
+                    'message' => 'Validasi gagal!',
                     'msgField' => $validator->errors() // menunjukkan field mana yang error
                 ]);
             }
@@ -236,12 +243,12 @@ class BarangController extends Controller
                 $check->update($request->all());
                 return response()->json([
                     'status' => true,
-                    'message' => 'Data barang berhasil diupdate'
+                    'message' => 'Data barang berhasil diperbarui!'
                 ]);
             } else{
                 return response()->json([
                     'status' => false,
-                    'message' => 'Data barang tidak ditemukan'
+                    'message' => 'Data barang tidak ditemukan!'
                 ]);
             }
         }
