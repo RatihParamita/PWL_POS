@@ -123,6 +123,14 @@ class SupplierController extends Controller
         redirect('/');
     }
 
+    //Menampilkan form detil data supplier AJAX
+    public function show_ajax($id)
+    {
+        $supplier = SupplierModel::find($id);
+        
+        return view('supplier.show_ajax', ['supplier' => $supplier]);
+    }
+
     public function show(string $id)
     {
         $supplier = SupplierModel::find($id);
@@ -189,7 +197,7 @@ class SupplierController extends Controller
         //periksa bila request dari ajax atau bukan
         if($request->ajax() || $request->wantsJson()) {
             $rules = [
-                'supplier_kode' => 'required|string|unique:m_supplier,supplier_kode',
+                'supplier_kode' => 'required|string|unique:m_supplier,supplier_kode,'.$id.',supplier_id',
                 'supplier_nama' => 'required|string|max:100',
                 'supplier_alamat' => 'required|string|max:255'
             ];
