@@ -107,6 +107,9 @@ Route::middleware(['auth'])->group(function(){
         Route::put('/{id}/update_ajax', [KategoriController::class, 'update_ajax']);        //menyimpan perubahan data kategori AJAX
         Route::get('/{id}/delete_ajax', [KategoriController::class, 'confirm_ajax']);       //menampilkan form confirm hapus data kategori AJAX
         Route::delete('/{id}/delete_ajax', [KategoriController::class, 'delete_ajax']);     //menghapus data kategori AJAX
+        Route::get('/import', [KategoriController::class, 'import']);                       //menampilkan form impor data kategori
+        Route::post('/import_ajax', [KategoriController::class, 'import_ajax']);            //mengimpor file excel ke daftar data kategori
+        Route::get('/export_excel', [KategoriController::class, 'export_excel']);           //mengekspor data kategori dalam bentuk file excel
         Route::get('/export_pdf', [KategoriController::class, 'export_pdf']);               //mengekspor data kategori dalam bentuk file pdf
     });
     
