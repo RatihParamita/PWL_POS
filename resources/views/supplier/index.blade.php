@@ -4,7 +4,9 @@
   <div class="card card-outline card-primary"> 
       <div class="card-header"> 
         <h3 class="card-title">{{ $page->title }}</h3> 
-        <div class="card-tools"> 
+        <div class="card-tools">
+          <button onclick="modalAction('{{ url('/supplier/import') }}')" class="btn btn-info">Impor Supplier</button>
+          <a href="{{ url('/supplier/export_excel') }}" class="btn btn-primary"><i class="fa fa-file-excel"></i> Ekspor Data Supplier</a>
           <a href="{{ url('/supplier/export_pdf') }}" class="btn btn-warning"><i class="fa fa-file-pdf"></i> Ekspor Data Supplier</a>
           <button onclick="modalAction('{{ url('/supplier/create_ajax') }}')" class="btn btn-sm btn-success mt-1">Tambah Ajax</button>
         </div> 

@@ -124,6 +124,9 @@ Route::middleware(['auth'])->group(function(){
         Route::put('/{id}/update_ajax', [SupplierController::class, 'update_ajax']);        //menyimpan perubahan data supplier AJAX
         Route::get('/{id}/delete_ajax', [SupplierController::class, 'confirm_ajax']);       //menampilkan form confirm hapus data supplier AJAX
         Route::delete('/{id}/delete_ajax', [SupplierController::class, 'delete_ajax']);     //menghapus data supplier AJAX
+        Route::get('/import', [SupplierController::class, 'import']);                       //menampilkan form impor data supplier
+        Route::post('/import_ajax', [SupplierController::class, 'import_ajax']);            //mengimpor file excel ke daftar data supplier
+        Route::get('/export_excel', [SupplierController::class, 'export_excel']);           //mengekspor data supplier dalam bentuk file excel
         Route::get('/export_pdf', [SupplierController::class, 'export_pdf']);               //mengekspor data supplier dalam bentuk file pdf
     });
 
