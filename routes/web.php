@@ -90,6 +90,9 @@ Route::middleware(['auth'])->group(function(){
         Route::put('/{id}/update_ajax', [LevelController::class, 'update_ajax']);       //menyimpan perubahan data level AJAX
         Route::get('/{id}/delete_ajax', [LevelController::class, 'confirm_ajax']);      //menampilkan form confirm hapus data level AJAX
         Route::delete('/{id}/delete_ajax', [LevelController::class, 'delete_ajax']);    //menghapus data level AJAX
+        Route::get('/import', [LevelController::class, 'import']);                      //menampilkan form impor data level
+        Route::post('/import_ajax', [LevelController::class, 'import_ajax']);           //mengimpor file excel ke daftar data level
+        Route::get('/export_excel', [LevelController::class, 'export_excel']);          //mengekspor data level dalam bentuk file excel
         Route::get('/export_pdf', [LevelController::class, 'export_pdf']);              //mengekspor data level dalam bentuk file pdf
     });
     
