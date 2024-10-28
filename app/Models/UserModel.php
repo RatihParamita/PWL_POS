@@ -5,11 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Foundation\Auth\User as Authenticatable; //implementasi class Aunthenticatable
 
-class UserModel extends Authenticatable
+class UserModel extends Authenticatable implements JWTSubject
 {
-    use HasFactory;
+    public function getJWTIdentifier(){
+        return $this->getKey(); //mengembalikan primary key dari UserModel sebagai identifier untuk JWT
+    }
+
+    public function getJWTCustomClaims(){
+        return [];  //memungkinkan penambahan klaim khusus ke payload JWT
+    }
+
+    //use HasFactory;
 
     protected $table = 'm_user';        //mendefinisikan nama tabel yang digunakan UserModel
     protected $primaryKey = 'user_id';  //mendefinisikan primary key dari tabel yang digunakan

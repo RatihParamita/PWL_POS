@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\APIController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//API Web
+Route::post('/register', App\Http\Controllers\Api\RegisterController::class)->name('register');
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+//API Mobile
+Route::post("all_data", [APIController::class, "index"]);
+Route::post("create_data", [APIController::class, "store"]);
+Route::post("show_data", [APIController::class, "show"]);
+Route::post("edit_data", [APIController::class, "edit"]);
+Route::post("delete_data", [APIController::class, "destroy"]);
