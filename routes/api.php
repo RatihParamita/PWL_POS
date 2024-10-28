@@ -17,14 +17,17 @@ use App\Http\Controllers\APIController;
 
 //API Web
 Route::post('/register', App\Http\Controllers\Api\RegisterController::class)->name('register');
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::post('/login', App\Http\Controllers\Api\LoginController::class)->name('login');
+Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
 //API Mobile
+/*Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
 Route::post("all_data", [APIController::class, "index"]);
 Route::post("create_data", [APIController::class, "store"]);
 Route::post("show_data", [APIController::class, "show"]);
 Route::post("edit_data", [APIController::class, "edit"]);
-Route::post("delete_data", [APIController::class, "destroy"]);
+Route::post("delete_data", [APIController::class, "destroy"]);*/
