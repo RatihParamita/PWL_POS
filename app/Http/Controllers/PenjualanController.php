@@ -63,9 +63,10 @@ class PenjualanController extends Controller
     public function create_ajax()
     {
         $user = UserModel::select('user_id', 'nama')->get();
+        $barang = BarangModel::select('barang_id', 'barang_nama', 'harga_jual')->get();
 
         return view('penjualan.create_ajax')
-                    ->with('user', $user);
+                    ->with(['user' => $user, 'barang' => $barang]);
     }
 
     //Menyimpan data penjualan baru AJAX
@@ -77,6 +78,10 @@ class PenjualanController extends Controller
                 'user_id' => ['required', 'integer', 'exists:m_user,user_id'],
                 'pembeli' => ['required', 'string', 'max:100'],
                 'penjualan_tanggal' => ['required', 'date'],
+                'items'          => 'required|array', 
+                'items.*.barang_id' => 'required|integer', 
+                'items.*.jumlah' => 'required|integer|min:1', 
+                'items.*.harga' => 'required|numeric|min:0',
             ];
 
             $validator = Validator::make($request->all(), $rules);
@@ -89,17 +94,33 @@ class PenjualanController extends Controller
                 ]);
             }
 
-            PenjualanModel::create($request->all());
+            $penjualan = PenjualanModel::create($request->only(['user_id','pembeli','penjualan_kode', 'penjualan_tanggal', 'penjualan_jumlah']));
+
+            foreach ($request->items as $item) {
+                PenjualanDetailModel::create([
+                    'penjualan_id'    => $penjualan->penjualan_id,
+                    'barang_id'  => $item['barang_id'],
+                    'jumlah'     => $item['jumlah'],
+                    'harga'      => $item['harga'],
+                ]);
+            }
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Data berhasil disimpan!'
+            ]);
+
+            /*PenjualanModel::create($request->all());
             return response()->json([
                 'status'    => true,
-                'message'   => 'Data penjualan berhasil disimpan'
-            ]);
+                'message'   => 'Data penjualan berhasil disimpan!'
+            ]);*/
         }
         redirect('/');
     }
 
     //Menampilkan form detil data penjualan AJAX
-    public function show_ajax($id)
+    public function show_ajax(string $id)
     {
         //$penjualan = PenjualanModel::find($id);
 
@@ -112,10 +133,12 @@ class PenjualanController extends Controller
     //Menampilkan laman form edit penjualan AJAX
     public function edit_ajax(string $id)
     {
-        $penjualan = PenjualanModel::find($id);
+        $penjualan = PenjualanModel::with('detail')->find($id);
+        $detail = PenjualanDetailModel::select('penjualan_id')->get();
         $user = UserModel::select('user_id', 'nama')->get();
+        $barang = BarangModel::select('barang_id', 'barang_nama') -> get();
 
-        return view('penjualan.edit_ajax', ['penjualan' => $penjualan, 'user' => $user]);
+        return view('penjualan.edit_ajax') -> with(['penjualan' => $penjualan, 'detail' => $detail, 'user' => $user, 'barang' => $barang]);
     }
 
     //Menyimpan perubahan data penjualan AJAX
@@ -127,6 +150,10 @@ class PenjualanController extends Controller
                 'user_id' => ['required', 'integer', 'exists:m_user,user_id'],
                 'pembeli' => ['required', 'string', 'max:100'],
                 'penjualan_tanggal' => ['required', 'date'],
+                'items' => 'required|array',
+                'items.*.barang_id' => 'required|integer',
+                'items.*.jumlah' => 'required|integer',
+                'items.*.harga' => 'required|numeric'
             ];
 
             // use Illuminate\Support\Facades\Validator;
@@ -140,9 +167,19 @@ class PenjualanController extends Controller
                 ]);
             }
 
-            $check = PenjualanModel::find($id);
-            if ($check) {
-                $check->update($request->all());
+            $penjualan = PenjualanModel::find($id);
+            if ($penjualan) {
+                $penjualan->update($request->only(['penjualan_kode', 'user_id', 'pembeli', 'penjualan_tanggal']));
+
+                $penjualan->detail()->delete();
+
+                foreach ($request->items as $item){
+                    $penjualan->detail()->create([
+                        'barang_id' => $item['barang_id'],
+                        'jumlah' => $item['jumlah'],
+                        'harga' => $item['harga'],
+                    ]);
+                }
                 return response()->json([
                     'status' => true,
                     'message' => 'Data penjualan berhasil diperbarui!'
@@ -171,6 +208,7 @@ class PenjualanController extends Controller
         if ($request->ajax() || $request->wantsJson()){
             $penjualan = PenjualanModel::find($id);
             if ($penjualan) { //jika data sudah ditemukan
+                PenjualanDetailModel::where('penjualan_id', $id)->delete();
                 $penjualan->delete(); //data penjualan dihapus
                 return response()->json([
                     'status'    => true,
@@ -222,11 +260,27 @@ class PenjualanController extends Controller
                             'pembeli' => $value['C'],
                             'penjualan_tanggal' => $value['F'],
                         ];
+
+                        $insertDetail[] = [
+                            'barang_id' => $value['G'],
+                            'jumlah' => $value['H'],
+                            'harga' => $value['I'],
+                        ];
                     }
                 }
                 if(count($insert) > 0){
                     // insert data ke database, jika data sudah ada, maka diabaikan
                     PenjualanModel::insertOrIgnore($insert);
+                }
+
+                if (count($insertDetail) > 0) {
+                    $penjualanIds = PenjualanModel::orderBy('penjualan_id', 'desc')->take(count($insert))->pluck('penjualan_id')->toArray();
+                    
+                    foreach ($insertDetail as $index => &$detail) {
+                        $detail['penjualan_id'] = $penjualanIds[$index]; 
+                    }
+                    
+                    PenjualanDetailModel::insertOrIgnore($insertDetail); 
                 }
                 return response()->json([
                     'status' => true,
@@ -249,6 +303,7 @@ class PenjualanController extends Controller
                     ->orderBy('user_id')
                     ->with('user')
                     ->get();
+        //dd($penjualan);
         //load library excel
         $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet(); //ambil sheet yang aktif
@@ -257,7 +312,7 @@ class PenjualanController extends Controller
         $sheet->setCellValue('B1', 'Kode Penjualan');
         $sheet->setCellValue('C1', 'Nama Pembeli');
         $sheet->setCellValue('D1', 'Tanggal Penjualan');
-        $sheet->setCellValue('E1', 'Pengguna');
+        $sheet->setCellValue('E1', 'Kasir');
         
         $sheet->getStyle('A1:E1')->getFont()->setBold(true); //bold header
 

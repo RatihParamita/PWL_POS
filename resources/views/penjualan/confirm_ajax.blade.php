@@ -32,7 +32,38 @@
                     <tr><th class="text-right col-3">Kode :</th><td class="col-9">{{$penjualan->penjualan_kode }}</td></tr>
                     <tr><th class="text-right col-3">Nama Pembeli :</th><td class="col-9">{{$penjualan->pembeli }}</td></tr>
                     <tr><th class="text-right col-3">Tanggal :</th><td class="col-9">{{$penjualan->penjualan_tanggal }}</td></tr>
-                    <tr><th class="text-right col-3">User Pembeli :</th><td class="col-9">{{$penjualan->user->nama }}</td></tr>
+                    <tr><th class="text-right col-3">Kasir :</th><td class="col-9">{{$penjualan->user->nama }}</td></tr>
+                </table>
+                <h5>Detil Barang:</h5>
+                <table class="table table-sm table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Nama Barang</th>
+                            <th>Harga</th>
+                            <th>Jumlah</th>
+                            <th colspan="3" class="text-right">Total Harga</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php $totalHarga = 0; @endphp
+                        @foreach ($penjualan->detail as $detail)
+                            <tr>
+                                <td>{{ $detail->barang->barang_nama }}</td>
+                                <td>{{ number_format($detail->harga, 0, ',', '.') }}</td>
+                                <td>{{ $detail->jumlah }}</td>
+                                <td>{{ number_format($detail->jumlah * $detail->harga, 0, ',', '.') }}</td>
+                            </tr>
+                            @php $totalHarga += $detail->jumlah * $detail->harga; @endphp
+                        @endforeach
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>{{ number_format($totalHarga, 0, ',', '.') }}</th>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
             <div class="modal-footer">

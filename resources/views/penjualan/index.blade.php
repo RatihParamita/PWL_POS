@@ -29,14 +29,14 @@
                               <option value="{{ $item->user_id }}">{{ $item->nama }}</option>
                           @endforeach
                       </select>
-                      <small class="form-text text-muted">User Pembeli</small>
+                      <small class="form-text text-muted">Kasir</small>
                   </div>
               </div>
           </div>
       </div>
       <table class="table table-bordered table-striped table-hover table-sm" id="table_penjualan"> 
         <thead> 
-          <tr><th>ID</th><th>Kode Transaksi Penjualan</th><th>Nama Pembeli</th><th>Tanggal Transaksi Penjualan</th><th>User Pembeli</th><th>Aksi</th></tr> 
+          <tr><th>ID</th><th>Kode Transaksi Penjualan</th><th>Nama Pembeli</th><th>Tanggal Transaksi Penjualan</th><th>Kasir</th><th>Aksi</th></tr> 
         </thead> 
       </table> 
     </div> 

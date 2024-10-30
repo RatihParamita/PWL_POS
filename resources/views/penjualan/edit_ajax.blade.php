@@ -25,7 +25,7 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>User Pembeli</label>
+                    <label>Kasir</label>
                     <select name="user_id" id="user_id" class="form-control" required>
                         <option value="">- Pilih User -</option>
                         @foreach($user as $item)
@@ -49,6 +49,38 @@
                     <input value="{{ $penjualan->penjualan_tanggal }}" type="text" name="penjualan_tanggal" id="penjualan_tanggal" class="form-control" required>
                     <small id="error-penjualan_tanggal" class="error-text form-text text-danger"></small>
                 </div>
+                <div class="row">
+                    <div class="col-md-4"><label>Nama Barang</label></div>
+                    <div class="col-md-3"><label>Jumlah</label></div>
+                    <div class="col-md-3"><label>Harga</label></div>
+                    <div class="col-md-2"><label>&nbsp;</label></div>
+                </div>
+                <div class="form-group">
+                    <div id="items-container">
+                        @foreach ($penjualan->detail as $index => $detail)
+                        <div class="row item-row">
+                            <div class="col-md-4">
+                                <select name="items[{{ $index }}][barang_id]" class="form-control" required>
+                                    <option value="">- Pilih Barang -</option>
+                                    @foreach($barang as $item)
+                                        <option value="{{ $item->barang_id }}" {{ $item->barang_id == $detail->barang_id ? 'selected' : '' }}>{{ $item->barang_nama }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="number" name="items[{{ $index }}][jumlah]" class="form-control jumlah-barang" value="{{ $detail->jumlah }}" required>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="number" name="items[{{ $index }}][harga]" class="form-control" value="{{ $detail->harga }}" required>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-danger remove-item">Hapus</button>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                    <button type="button" class="btn btn-success mt-2" id="add-item">Tambah Barang</button>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
@@ -65,6 +97,20 @@
                     penjualan_kode: {required: true, minlength: 3, maxlength: 20},
                     pembeli: {required: true, maxlength: 100},
                     penjualan_tanggal: {required: true, date: true},
+                    "items[][jumlah]": { required: true, number: true, min: 1 },
+                    "items[][harga]": { required: true, number: true, min: 1 }
+                },
+                messages: {
+                    "items[][jumlah]": {
+                        required: "Jumlah barang harus diisi",
+                        number: "Jumlah harus berupa angka",
+                        min: "Jumlah minimal 1"
+                    },
+                    "items[][harga]": {
+                        required: "Harga harus diisi",
+                        number: "Harga harus berupa angka",
+                        min: "Harga minimal 1"
+                    }
                 },
                 submitHandler: function(form) {
                     var formData = new FormData(form);
@@ -109,6 +155,45 @@
                 unhighlight: function (element, errorClass, validClass) {
                     $(element).removeClass('is-invalid');
                 }
+            });
+
+            // Adding new item row
+            $('#add-item').on('click', function() {
+                const newItemRow = `
+                    <div class="row item-row">
+                        <div class="col-md-4">
+                            <label>Nama Barang</label>
+                            <select name="items[${itemIndex}][barang_id]" class="form-control" required>
+                                <option value="">- Pilih Barang -</option>
+                                @foreach($barang as $item)
+                                    <option value="{{ $item->barang_id }}">{{ $item->barang_nama }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Jumlah</label>
+                            <input type="number" name="items[${itemIndex}][jumlah]" class="form-control" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Harga</label>
+                            <input type="number" name="items[${itemIndex}][harga]" class="form-control" required>
+                        </div>
+                        <div class="col-md-2">
+                            <label>&nbsp;</label>
+                            <button type="button" class="btn btn-danger remove-item">Hapus</button>
+                        </div>
+                    </div>
+                `;
+                $('#items-container').append(newItemRow);
+                itemIndex++; 
+
+                $('.remove-item').off('click').on('click', function() {
+                    $(this).closest('.item-row').remove();
+                });
+            });
+
+            $(document).on('click', '.remove-item', function() {
+                $(this).closest('.item-row').remove();
             });
         });
     </script>

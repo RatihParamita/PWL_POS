@@ -73,10 +73,10 @@
         <thead>
             <tr>
                 <th class="text-center" width="5%">No.</th>
-                <th width="14%">Kode Transaksi Penjualan</th>
+                <th width="15%">Kode Transaksi Penjualan</th>
                 <th width="10%">Nama Pembeli</th>
                 <th class="text-right" width="18%">Tanggal Transaksi Penjualan</th>
-                <th width="13%">User Pembeli</th>
+                <th width="12%">Kasir</th>
             </tr>
         </thead>
         <tbody>
