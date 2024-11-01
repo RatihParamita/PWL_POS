@@ -150,7 +150,6 @@
             const newItemRow = `
                 <div class="row item-row">
                     <div class="col-md-4">
-                        <label>Nama Barang</label>
                         <select name="items[${itemIndex}][barang_id]" class="form-control" required>
                             <option value="">- Pilih Barang -</option>
                             @foreach($barang as $item)
@@ -159,15 +158,12 @@
                         </select>
                     </div>
                     <div class="col-md-3">
-                        <label>Jumlah</label>
                         <input type="number" name="items[${itemIndex}][jumlah]" class="form-control" required>
                     </div>
                     <div class="col-md-3">
-                        <label>Harga</label>
                         <input type="number" name="items[${itemIndex}][harga]" class="form-control" required>
                     </div>
                     <div class="col-md-2">
-                        <label>&nbsp;</label>
                         <button type="button" class="btn btn-danger remove-item">Hapus</button>
                     </div>
                 </div>
