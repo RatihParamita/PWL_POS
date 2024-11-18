@@ -28,6 +28,9 @@
                     <tr><th class="text-right col-4">Nama :</th><td class="col-9">{{ $barang->barang_nama }}</td></tr>
                     <tr><th class="text-right col-4">Harga Beli :</th><td class="col-9">{{ $barang->harga_beli }}</td></tr>
                     <tr><th class="text-right col-4">Harga Jual :</th><td class="col-9">{{ $barang->harga_jual }}</td></tr>
+                    <tr><th class="text-right col-4">Gambar :</th><td class="col-9">{{-- $barang->image --}}
+                        <img src="{{ asset($barang->image) }}" alt="Gambar" style="max-width: 100px; height: auto;">
+                    </td></tr>
                 </table>
             </div>
             <div class="modal-footer">

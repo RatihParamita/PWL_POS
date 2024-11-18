@@ -34,7 +34,7 @@ class BarangController extends Controller
 
     public function list(Request $request) 
     { 
-        $barang = BarangModel::select('barang_id', 'barang_kode', 'barang_nama', 'harga_beli', 'harga_jual', 'kategori_id') 
+        $barang = BarangModel::select('barang_id', 'barang_kode', 'barang_nama', 'harga_beli', 'harga_jual', 'image', 'kategori_id') 
                     ->with('kategori'); 
 
         $kategori_id = $request->input('filter_kategori');
@@ -84,7 +84,8 @@ class BarangController extends Controller
             'barang_kode' => 'required|string|min:3', 
             'barang_nama' => 'required|string|max:100',                    
             'harga_beli'  => 'required|integer',      
-            'harga_jual'  => 'required|integer',                         
+            'harga_jual'  => 'required|integer',
+            'image'       => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'kategori_id' => 'required|integer',                       
         ]);
 
@@ -93,10 +94,11 @@ class BarangController extends Controller
             'barang_nama'  => $request->barang_nama,
             'harga_beli'   => $request->harga_beli,
             'harga_jual'   => $request->harga_jual,
+            'image'        => $request->image->hashName(),
             'kategori_id'  => $request->kategori_id,
         ]);
 
-        return redirect('/barang')->with('success', 'Data barang berhasil disimpan');
+        return redirect('/barang')->with('success', 'Data barang berhasil disimpan!');
     }
 
     //Menampilkan laman form tambah barang baru AJAX
@@ -119,6 +121,7 @@ class BarangController extends Controller
                 'barang_nama' => ['required', 'string', 'max:100'],
                 'harga_beli' => ['required', 'numeric'],
                 'harga_jual' => ['required', 'numeric'],
+                'image' => ['required', 'image', 'max:2048'],
             ];
 
             $validator = Validator::make($request->all(), $rules);
@@ -126,7 +129,7 @@ class BarangController extends Controller
             if($validator->fails()){
                 return response()->json([
                     'status'    =>false,    //response status, false: eror/gagal, true:berhasil
-                    'message'   => 'Validasi Gagal',
+                    'message'   => 'Validasi Gagal.',
                     'msgField'  => $validator->errors(),    //pesan eror validasi
                 ]);
             }
@@ -134,7 +137,7 @@ class BarangController extends Controller
             BarangModel::create($request->all());
             return response()->json([
                 'status'    => true,
-                'message'   => 'Data barang berhasil disimpan'
+                'message'   => 'Data barang berhasil disimpan!'
             ]);
         }
         redirect('/');
